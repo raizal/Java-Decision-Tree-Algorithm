@@ -1,0 +1,66 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="/vendor/Treant.css">
+        
+        <script src="https://code.jquery.com/jquery-1.11.3.js"></script>
+        <script src="/vendor/raphael.js"></script>
+        <script src="/vendor/Treant.js"></script>
+        <script>            
+            function loadTreant(nodes){
+                var simple_chart_config = {
+                    chart: {
+                            container: "#tree"
+                    },
+                    nodeStructure: nodes
+                };
+                new Treant( simple_chart_config );
+            }
+
+            jQuery(function(){                
+                
+                $("#btn-try").click(function(){
+                    $.post( "/try", { data: $("#input").val(),input: $("#input-try").val()})
+                    .done(function( data ) {
+                      $("#result").html(data);
+                    });
+                });
+                
+                $("#draw-diagram").click(function(){
+                    $.post( "/tree", { data: $("#input").val()})
+                    .done(function( data ) {
+                        loadTreant(data);
+                      //loadGraph(data);
+                    });
+                });
+                
+                $("#draw-diagram").click();
+            });
+        </script>
+    </head>
+    <body style="display: inline; width: 98vw; height:95vh;">
+        <h1 style="text-align: center">Decision Tree</h1>
+        <div class="chart" id="tree" style="width: 55%; height: 80%;float: left; margin:10px;">
+            
+        </div>
+        <div style="float: left;width:42%;margin:10px;">            
+<textarea id="input" style="width: 100%;margin-bottom: 5px;" rows="24">
+Usia,Berat,Kelamin,Hipertensi
+muda,overweight,pria,ya
+muda,underweight,pria,tidak
+muda,average,wanita,tidak
+tua,overweight,pria,tidak
+tua,overweight,pria,ya
+muda,underweight,pria,tidak
+tua,overweight,wanita,ya
+tua,average,pria,tidak
+</textarea>
+            <button id="draw-diagram">Proses</button>
+            <p style="width:100%;margin:5px 0;">Coba cari jawaban: </p>
+            <div style="display: inline-block;width: 100%; margin: 5px 0">
+                <input type="text" style="width: 75%" id="input-try" value="pria,tua,average">
+                <button id="btn-try">Check Hasil</button>
+            </div>
+            <label id="result"></label>
+        </div>
+    </body>
+</html>
